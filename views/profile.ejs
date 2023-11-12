@@ -104,6 +104,7 @@
                   <div class="flex items-center">
                     <!-- DIFF TYPES OF MOOD  -->
                     <!-- credit: https://stackoverflow.com/questions/63633427/switch-condition-statement-semicolon-error-inside-ejs-template -->
+         
                     <% switch(feelings[i].mood) { 
                       case 'Happy' : %>
                         <span
@@ -147,29 +148,19 @@
                   <!-- credit : https://stackoverflow.com/questions/57661892/ejs-comparison-between-two-same-strings -->
                   <% if(feelings[i].creatorId.toString()==user._id.toString()) { %>
 
-                    <!-- <td class="px-4 py-3 "> -->
-                      <!-- <button id="apple-imac-20-dropdown-button" data-dropdown-toggle="apple-imac-20-dropdown"
-                        class="inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
-                        type="button">
-                        <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
-                        </svg>
-                      </button> -->
-
                       <button type="button" data-dropdown-toggle="apple-imac-20-dropdown"
-                        class="text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 moodUpdate"
-                        id="<%= feelings[i]._id %>">Actions</button>
+                        class="actions-button text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2" id="<%= feelings[i]._id %>"> Actions</button>
 
                       <div id="apple-imac-20-dropdown"
                         class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
                         <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="apple-imac-20-dropdown-button">
                           <li>
-                            <a href="#" class="moodUpdate block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" id="<%= feelings[i]._id %>">Edit Mood</a>
+                            <a href="#" class="moodUpdate block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" data-modal-target="update-static-modal" data-modal-toggle="update-static-modal" >Edit Mood</a>
                           </li>
                         </ul>
                         <div class="py-1">
                           <a href="#"
-                            class="trash block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white" id="<%= feelings[i]._id %>">Delete</a>
+                            class="trash block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete</a>
                         </div>
                       </div>
                   <% } %>
@@ -182,8 +173,75 @@
      
 
 
+    <!-- UPDATE MOOD MODAL -->
+    <div id="update-static-modal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true"
+      class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+      <div class="relative w-full max-w-2xl max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+          <!-- Modal header -->
+          <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+              Update🌱Mood 📋
+            </h3>
+            <button type="button"
+              class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+              data-modal-hide="update-static-modal">
+              <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+              </svg>
+              <span class="sr-only">Close modal</span>
+            </button>
+          </div>
 
-      <!-- Main modal -->
+          <!-- Modal body -->
+          <section class="bg-white dark:bg-gray-900">
+            <div class="py-8 px-4 mx-auto max-w-2xl lg:py-16">
+    
+              <form action="/feelings" method="PUT">
+                <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
+                  
+    
+                  
+                  <!-- key "name = "id" sent to serve  & added type=hidden to hide it in the DOM -->
+                  <input type="hidden" id="yourid" name="id" />
+                  <div class="sm:col-span-2">
+                    <div>
+                      <label for="mood" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select How Your Feeling</label>
+                      <select name="mood" id="mood"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <option value="Happy">Happy</option>
+                        <option value="Creative">Creative</option>
+                        <option value="Grateful">Grateful</option>
+                        <option value="Excited">Excited</option>
+                        <option value="Sad">Sad</option>
+                        <option value="Mad">Mad</option>
+                        <option value="Tired">Tired</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+    
+                <!-- Modal footer -->
+                <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+                  <button data-modal-hide="update-static-modal" type="submit" 
+                    class="updatebtn text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" >
+                    Update Mood 🌱</button>
+                </div>
+                <!-- bootstrap button -->
+                <!-- <button type="submit" class="btn btn-outline-primary">POST BLOG</button> -->
+              </form>
+            </div>
+          </section>
+    
+    
+        </div>
+      </div>
+    </div>
+
+
+      <!-- CREATE MOOD MODAL -->
     <div id="static-modal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true"
       class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
       <div class="relative w-full max-w-2xl max-h-full">
@@ -204,9 +262,6 @@
               <span class="sr-only">Close modal</span>
             </button>
           </div>
-
-        
-
 
           <!-- Modal body -->
     
@@ -278,20 +333,6 @@
         </div>
       </div>
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
 
   <script src="main.js"></script>
 

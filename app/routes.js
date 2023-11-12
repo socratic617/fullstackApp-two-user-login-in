@@ -14,6 +14,9 @@ module.exports = function(app, passport, db) {
     // PROFILE SECTION =========================
     app.get('/profile', isLoggedIn, function(req, res) { // checks to see if logged in or send them back to homepage if not logged in 
         db.collection(collectionName).find().toArray((err, result) => {
+
+          console.log("GET COLLECTION FROM DATABASE ON PAGE LOAD")
+          console.log(result)
           if (err) return console.log(err)
           res.render('profile.ejs', {// this means that it will render my profile.ejs
             user : req.user,//showcases there usr name when logged in
@@ -52,50 +55,21 @@ module.exports = function(app, passport, db) {
     })
 
     app.put('/feelings', (req, res) => {
-  
+
       console.log(" (put method) : ")
       console.log(req.body)
-
-      // //  variable 'starredRecipe' is assigned once  it locates object id from the user post in our database, and if it does find it, it will return
-      // //  and assign that star to the recipe 
-
-
-      // db.collection('mood')
-      // .find({_id: ObjectId(req.body.id)})
-      // .toArray((err, result) => {
-      //     if (err) return console.log(err)
-      //     console.log("result : ", result)
-
-      //     console.log(result[0].reactions[req.body.loggedInUserId])
-
-      //     if(result[0].reactions[req.body.loggedInUserId] !== undefined){
-      //       console.log('i need to remove the user id  ')
-      //       delete result[0].reactions[req.body.loggedInUserId]; //credit: https://stackoverflow.com/questions/3455405/how-do-i-remove-a-key-from-a-javascript-object
-      //       //im removing the star if I dont want to star it 
-
-      //     }
-      //     else{
-      //       console.log('i need to add user id  ')
-      //       result[0].reactions[req.body.loggedInUserId] = true; //this is how im adding star fav to post 
-      //       console.log(result[0].reactions)
-      //     }
-      //     db.collection('mood')
-      //     .findOneAndUpdate({_id: ObjectId(req.body.id)}, {
-      //       $set: {
-      //         reactions: result[0].reactions,
-      //       }
-      //     }, {
-      //       sort: {_id: -1},
-      //       upsert: true
-      //     }, (err, result) => {
-      //       if (err) return res.send(err)
-      //       res.send(result)
-      //     })
-
-
-      //   })
-
-
+      db.collection('mood')
+      .findOneAndUpdate({_id: ObjectId(req.body.id)}, {
+        $set: {
+          mood: req.body.currentMood,
+        }
+      }, {
+        sort: {_id: -1},
+        upsert: true
+      }, (err, result) => {
+        if (err) return res.send(err)
+        res.send('updated mood!')
+      })
     })
 
     app.delete('/feelings', (req, res) => {
