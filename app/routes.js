@@ -68,7 +68,7 @@ module.exports = function(app, passport, db) {
         upsert: true
       }, (err, result) => {
         if (err) return res.send(err)
-        res.send('updated mood!')
+        res.redirect('/profile')
       })
     })
 
