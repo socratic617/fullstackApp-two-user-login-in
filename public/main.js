@@ -11,7 +11,7 @@ function submitUpdate(){ //this is the function tht runs whe clicking mood Updat
 
   let mood = document.querySelector('#mood').value;// this stores the value of what user select for mood ex: happy tired sad happy etc..
   console.log("this is my new mood : ", mood)
-  console.log("this.id  for submit update: " , this.id )
+  console.log("this.id  for submit update!!!: " , currentRowid )
 
   fetch('feelings', { // this information will be sent to server
     method: 'put',
@@ -23,7 +23,8 @@ function submitUpdate(){ //this is the function tht runs whe clicking mood Updat
       currentMood: mood // this will be updating my current mood in server 
     })
   }).then(function (response) {
-    window.location.reload()
+    console.log("redirecting to profile :")
+    window.location.href='/profile'
   })
 
 }

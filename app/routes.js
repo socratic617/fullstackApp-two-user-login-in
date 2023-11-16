@@ -12,15 +12,15 @@ module.exports = function(app, passport, db) {
     });
 
     // PROFILE SECTION =========================
-    app.get('/profile', isLoggedIn, function(req, res) { // checks to see if logged in or send them back to homepage if not logged in 
+    app.get('/profile', isLoggedIn, function(req, res) { // checks to see if logged in or send them back to homepage if not logged in // app.get the traffic from the path "endpoint aka /profile"
         db.collection(collectionName).find().toArray((err, result) => {
 
           console.log("GET COLLECTION FROM DATABASE ON PAGE LOAD")
           console.log(result)
           if (err) return console.log(err)
           res.render('profile.ejs', {// this means that it will render my profile.ejs
-            user : req.user,//showcases there usr name when logged in
-            feelings: result
+            user : req.user, //object //showcases there usr name when logged in
+            feelings: result //aray of objects
           })
         })
     });
@@ -68,7 +68,8 @@ module.exports = function(app, passport, db) {
         upsert: true
       }, (err, result) => {
         if (err) return res.send(err)
-        res.redirect('/profile')
+        console.log('successfully triggered put')
+        res.send('updated!')
       })
     })
 
